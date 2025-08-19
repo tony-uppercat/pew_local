@@ -3,6 +3,8 @@
  * Handles worker lifecycle, message passing, and error handling
  */
 
+import { useState, useEffect } from 'react';
+
 interface WorkerTask {
   id: string;
   type: string;
@@ -468,8 +470,6 @@ export function useWorkerStatus() {
       activeTasks: 0,
     };
   }
-
-  const { useState, useEffect } = require('react');
   
   const [stats, setStats] = useState(workerManager.getStats());
 

@@ -6,6 +6,10 @@ import { VitePWA } from 'vite-plugin-pwa';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://pew.app',
+  // Disable dev toolbar to avoid axobject-query import issues
+  devToolbar: {
+    enabled: false,
+  },
   integrations: [
     react(),
     tailwind({
@@ -37,10 +41,32 @@ export default defineConfig({
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,svg,ico,png,webp}'],
+          runtimeCaching: [
+            {
+              urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'images',
+                expiration: {
+                  maxEntries: 100,
+                  maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+                },
+              },
+            },
+            {
+              urlPattern: /^https:\/\/api\./,
+              handler: 'StaleWhileRevalidate',
+              options: {
+                cacheName: 'api-cache',
+              },
+            },
+          ],
         },
         devOptions: {
           enabled: true,
+          type: 'module',
         },
+        injectRegister: 'auto',
       })
     ],
     // Vite 6 optimizations
@@ -60,14 +86,6 @@ export default defineConfig({
       },
       // Modern build target
       target: 'esnext',
-      // Optimize for production
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-        },
-      },
     },
     // Development optimizations
     optimizeDeps: {

@@ -3,6 +3,8 @@
  * Tracks Core Web Vitals, memory usage, and provides optimization tools
  */
 
+import { useState, useEffect } from 'react';
+
 interface PerformanceMetrics {
   // Core Web Vitals
   lcp?: number; // Largest Contentful Paint
@@ -573,8 +575,6 @@ export function usePerformanceMonitor() {
       score: 0,
     };
   }
-
-  const { useState, useEffect } = require('react');
   
   const [metrics, setMetrics] = useState<PerformanceMetrics>({});
   const [score, setScore] = useState(0);

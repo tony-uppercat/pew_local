@@ -47,27 +47,49 @@ class PWAService {
     }
 
     try {
-      // Initialize Workbox
-      this.manager.workbox = new Workbox('/sw.js', {
-        scope: '/',
-        type: 'module',
-      });
-
-      // Handle service worker events
-      this.setupWorkboxListeners();
-
-      // Register service worker
-      const registration = await this.manager.workbox.register();
-      console.log('Service Worker registered:', registration);
+      // Wait for VitePWA to register the service worker
+      // VitePWA uses registerType: 'autoUpdate' which handles registration automatically
+      await this.waitForServiceWorkerRegistration();
 
       // Request persistent storage
       await this.requestPersistentStorage();
 
-      this.emit('initialized', { registration });
+      this.emit('initialized', { registration: null });
     } catch (error) {
       console.error('Failed to initialize PWA:', error);
       this.emit('error', { error, type: 'initialization' });
     }
+  }
+
+  /**
+   * Wait for VitePWA to register the service worker
+   */
+  private async waitForServiceWorkerRegistration(): Promise<void> {
+    // Check if service worker is already registered
+    if (navigator.serviceWorker.controller) {
+      console.log('Service Worker already registered');
+      return;
+    }
+
+    // Wait for service worker registration
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error('Service Worker registration timeout'));
+      }, 10000); // 10 second timeout
+
+      const checkRegistration = () => {
+        if (navigator.serviceWorker.controller) {
+          clearTimeout(timeout);
+          console.log('Service Worker registered by VitePWA');
+          resolve();
+        } else {
+          // Check again in 100ms
+          setTimeout(checkRegistration, 100);
+        }
+      };
+
+      checkRegistration();
+    });
   }
 
   /**
