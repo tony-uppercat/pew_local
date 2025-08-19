@@ -5,8 +5,8 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://[TUO-USERNAME].github.io/[NOME-REPO]', // Sostituisci con il tuo username e nome repo
-  base: '/[NOME-REPO]', // Sostituisci con il nome del tuo repository
+  site: 'https://antoniocottone.github.io/pew_local',
+  base: '/pew_local',
   // Disable dev toolbar to avoid axobject-query import issues
   devToolbar: {
     enabled: false,
@@ -30,8 +30,8 @@ export default defineConfig({
           theme_color: '#1f2937',
           background_color: '#111827',
           display: 'standalone',
-          scope: '/[NOME-REPO]/', // Aggiorna con il nome del repo
-          start_url: '/[NOME-REPO]/', // Aggiorna con il nome del repo
+          scope: '/pew_local/',
+          start_url: '/pew_local/',
           icons: [
             {
               src: 'favicon.svg',
