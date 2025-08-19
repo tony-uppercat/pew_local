@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEW Icon Generator</title>
+</head>
+<body>
+    <h1>PEW App Icon Generator</h1>
+    <p>This page generates the required PWA icons for the Pocket Expense Wallet app.</p>
+    
+    <canvas id="iconCanvas" width="512" height="512" style="border: 1px solid #ccc; max-width: 300px;"></canvas>
+    <br><br>
+    
+    <button onclick="generateIcons()">Generate All Icons</button>
+    <div id="downloads"></div>
+
+    <script>
+        function drawIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            canvas.width = size;
+            canvas.height = size;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, size, size);
+            
+            // Background gradient (light gray to white)
+            const gradient = ctx.createLinearGradient(0, 0, 0, size);
+            gradient.addColorStop(0, '#F0F0F0');
+            gradient.addColorStop(1, '#FFFFFF');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Border radius effect (rounded corners)
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.beginPath();
+            const radius = size * 0.18; // 18% radius for iOS style
+            ctx.roundRect(0, 0, size, size, radius);
+            ctx.fill();
+            ctx.globalCompositeOperation = 'source-over';
+            
+            // Main accent circle
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const circleRadius = size * 0.3;
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, circleRadius, 0, 2 * Math.PI);
+            ctx.fillStyle = '#D4FF5A'; // Accent green
+            ctx.fill();
+            
+            // Inner shadow for depth
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, circleRadius * 0.8, 0, 2 * Math.PI);
+            ctx.fillStyle = '#B8E643'; // Darker green
+            ctx.fill();
+            
+            // Wallet icon (simplified)
+            ctx.fillStyle = '#1A1A1A'; // Dark text
+            ctx.font = `${size * 0.25}px system-ui, -apple-system, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('💰', centerX, centerY);
+            
+            // App name below (for larger sizes)
+            if (size >= 256) {
+                ctx.fillStyle = '#2A2A2A';
+                ctx.font = `${size * 0.08}px system-ui, -apple-system, sans-serif`;
+                ctx.fillText('PEW', centerX, centerY + size * 0.35);
+            }
+        }
+        
+        function generateIcons() {
+            const canvas = document.getElementById('iconCanvas');
+            const sizes = [
+                { name: 'apple-touch-icon.png', size: 180 },
+                { name: 'apple-touch-icon-152x152.png', size: 152 },
+                { name: 'apple-touch-icon-167x167.png', size: 167 },
+                { name: 'apple-touch-icon-180x180.png', size: 180 },
+                { name: 'favicon-32x32.png', size: 32 },
+                { name: 'favicon-16x16.png', size: 16 },
+                { name: 'icon-192x192.png', size: 192 },
+                { name: 'icon-512x512.png', size: 512 }
+            ];
+            
+            const downloadsDiv = document.getElementById('downloads');
+            downloadsDiv.innerHTML = '<h3>Generated Icons:</h3>';
+            
+            sizes.forEach(icon => {
+                drawIcon(canvas, icon.size);
+                
+                canvas.toBlob(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = icon.name;
+                    link.textContent = `Download ${icon.name} (${icon.size}x${icon.size})`;
+                    link.style.display = 'block';
+                    link.style.margin = '5px 0';
+                    downloadsDiv.appendChild(link);
+                });
+            });
+            
+            // Show the 512x512 version on canvas
+            drawIcon(canvas, 512);
+        }
+        
+        // Generate initial icon
+        generateIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ExpenseApp from '@/components/ExpenseApp';
+---
+
+<BaseLayout
+  title="Pocket Expense Wallet - Track Expenses Offline"
+  description="Modern PWA for tracking expenses with offline capabilities, receipt scanning, and secure local storage."
+>
+  <ExpenseApp client:load />
+</BaseLayout>

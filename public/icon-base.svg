@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F0F0F0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Accent gradient -->
+    <radialGradient id="accentGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#E8FF8A;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#D4FF5A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B8E643;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background with rounded corners -->
+  <rect width="512" height="512" rx="92" ry="92" fill="url(#bgGradient)" />
+  
+  <!-- Main accent circle -->
+  <circle cx="256" cy="256" r="150" fill="url(#accentGradient)" />
+  
+  <!-- Inner circle for depth -->
+  <circle cx="256" cy="256" r="120" fill="#B8E643" opacity="0.8" />
+  
+  <!-- Wallet icon -->
+  <g transform="translate(256, 256)">
+    <!-- Wallet body -->
+    <rect x="-60" y="-35" width="120" height="70" rx="8" ry="8" fill="#1A1A1A" />
+    <!-- Wallet fold -->
+    <rect x="-60" y="-35" width="120" height="25" rx="8" ry="8" fill="#2A2A2A" />
+    <!-- Card slot -->
+    <rect x="-45" y="-15" width="90" height="3" rx="1" ry="1" fill="#D4FF5A" />
+    <rect x="-45" y="-8" width="90" height="3" rx="1" ry="1" fill="#D4FF5A" />
+    <!-- Money symbol -->
+    <text x="0" y="20" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="bold" fill="#D4FF5A">$</text>
+  </g>
+  
+  <!-- App name -->
+  <text x="256" y="420" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="36" font-weight="600" fill="#2A2A2A">PEW</text>
+</svg>
