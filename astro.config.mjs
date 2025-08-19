@@ -5,7 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://antoniocottone.github.io/pew_local',
+  site: 'https://tony-uppercat.github.io/pew_local',
   base: '/pew_local',
   // Disable dev toolbar to avoid axobject-query import issues
   devToolbar: {
@@ -22,7 +22,7 @@ export default defineConfig({
     plugins: [
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.svg'],
+        includeAssets: ['favicon.svg', 'icon-192x192.png', 'icon-512x512.png'],
         manifest: {
           name: 'Pocket Expense Wallet',
           short_name: 'PEW',
@@ -37,6 +37,16 @@ export default defineConfig({
               src: 'favicon.svg',
               sizes: 'any',
               type: 'image/svg+xml',
+            },
+            {
+              src: 'icon-192x192.png',
+              sizes: '192x192',
+              type: 'image/png',
+            },
+            {
+              src: 'icon-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
             },
           ],
         },
@@ -70,24 +80,6 @@ export default defineConfig({
         injectRegister: 'auto',
       })
     ],
-    // Vite 6 optimizations
-    build: {
-      // Bundle splitting for better caching
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            // Core React chunks
-            'react-vendor': ['react', 'react-dom'],
-            // Database and storage
-            'storage-vendor': ['dexie', 'idb-keyval'],
-            // PWA utilities
-            'pwa-vendor': ['workbox-window'],
-          },
-        },
-      },
-      // Modern build target
-      target: 'esnext',
-    },
     // Development optimizations
     optimizeDeps: {
       include: ['react', 'react-dom', 'dexie', 'idb-keyval'],
@@ -103,5 +95,4 @@ export default defineConfig({
   },
   // Modern output
   output: 'static',
-  adapter: undefined,
 });
