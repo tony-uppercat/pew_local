@@ -300,7 +300,7 @@ function ThemeToggle(): JSX.Element {
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
     
     // Update theme-color meta tag
-    const themeColor = newTheme === 'dark' ? '#111827' : '#f9fafb';
+    const themeColor = newTheme === 'dark' ? '#2A2A2A' : '#D4FF5A';
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', themeColor);
   };
 
