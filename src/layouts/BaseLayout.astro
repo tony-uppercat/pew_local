@@ -14,6 +14,7 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+import '../styles/global.css';
 ---
 
 <!doctype html>
@@ -80,8 +81,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Font preload temporarily disabled - using system fonts -->
     <!-- <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin /> -->
     
-    <!-- Global styles -->
-    <link rel="stylesheet" href="/src/styles/global.css" />
+    <!-- Global styles are imported via Astro frontmatter (processed by Tailwind) -->
     
     <!-- Inline critical CSS for faster loading -->
     <style>
@@ -171,67 +171,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         }
       });
       
-      // PWA install prompt handling
-      let deferredPrompt: any = null;
-      
-      window.addEventListener('beforeinstallprompt', (e: any) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        
-        // Show install button or banner
-        const installButton = document.querySelector('[data-pwa-install]') as HTMLElement;
-        if (installButton) {
-          installButton.style.display = 'block';
-          installButton.addEventListener('click', async () => {
-            if (deferredPrompt) {
-              deferredPrompt.prompt();
-              const { outcome } = await deferredPrompt.userChoice;
-              console.log(`PWA install prompt outcome: ${outcome}`);
-              deferredPrompt = null;
-            }
-          });
-        }
-      });
-      
-      // Track PWA installation
-      window.addEventListener('appinstalled', () => {
-        console.log('PWA was installed successfully');
-        deferredPrompt = null;
-      });
-      
-      // Service Worker registration
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', async () => {
-          try {
-            const registration = await navigator.serviceWorker.register('/sw.js');
-            console.log('SW registered: ', registration);
-            
-            // Handle SW updates
-            registration.addEventListener('updatefound', () => {
-              const newWorker = registration.installing;
-              if (newWorker) {
-                newWorker.addEventListener('statechange', () => {
-                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    // New content is available, prompt user to refresh
-                    if (confirm('New version available! Refresh to update?')) {
-                      window.location.reload();
-                    }
-                  }
-                });
-              }
-            });
-          } catch (error) {
-            console.log('SW registration failed: ', error);
-          }
-        });
-      }
-      
-      // Request persistent storage
-      if ('storage' in navigator && navigator.storage && 'persist' in navigator.storage) {
-        navigator.storage.persist().then((persistent) => {
-          console.log(`Persistent storage granted: ${persistent}`);
-        });
-      }
+      // PWA lifecycle is handled in React via pwaService; no duplicate SW registration here
     </script>
   </body>
 </html>
